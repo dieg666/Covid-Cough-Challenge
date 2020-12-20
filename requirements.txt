@@ -1,0 +1,6 @@
+ipython==7.19.0
+Keras==2.4.3
+numpy==1.19.4
+pathlib==1.0.1
+python-telegram-bot==13.1
+tensorboard==2.4.0
