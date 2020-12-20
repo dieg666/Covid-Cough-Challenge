@@ -9,19 +9,14 @@ from pathlib import Path
 from IPython.display import display, Audio
 
 
-
-# Get the data from https://www.kaggle.com/kongaevans/speaker-recognition-dataset/download
-# and save it to the 'Downloads' folder in your HOME directory
 DATASET_ROOT = os.path.join(os.path.expanduser("."), "DataParsed")
 
-# The folders in which we will put the audio samples and the noise samples
 
 DATASET_AUDIO_PATH = DATASET_ROOT
 
 # Percentage of samples to use for validation
 VALID_SPLIT = 0.1
 
-# Seed to use when shuffling the dataset and the noise
 SHUFFLE_SEED = 43
 
 # The sampling rate to use.
@@ -31,9 +26,6 @@ SHUFFLE_SEED = 43
 # (since all samples are of 1 second long)
 SAMPLING_RATE = 16000
 
-# The factor to multiply the noise with according to:
-#   noisy_sample = sample + noise * prop * scale
-#      where prop = sample_amplitude / noise_amplitude
 SCALE = 0.5
 
 BATCH_SIZE = 128
@@ -55,9 +47,6 @@ def path_to_audio(path):
 
 
 def audio_to_fft(audio):
-    # Since tf.signal.fft applies FFT on the innermost dimension,
-    # we need to squeeze the dimensions and then expand them again
-    # after FFT
     audio = tf.squeeze(audio, axis=-1)
     fft = tf.signal.fft(
         tf.cast(tf.complex(real=audio, imag=tf.zeros_like(audio)), tf.complex64)
@@ -168,9 +157,6 @@ model.compile(
     optimizer="Adam", loss="sparse_categorical_crossentropy", metrics=["accuracy"]
 )
 
-# Add callbacks:
-# 'EarlyStopping' to stop training when the model is not enhancing anymore
-# 'ModelCheckPoint' to always keep the model that has the best val_accuracy
 model_save_filename = "model.h5"
 
 earlystopping_cb = keras.callbacks.EarlyStopping(patience=10, restore_best_weights=True)
